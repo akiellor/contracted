@@ -5,7 +5,7 @@ Scenario: GET /
   When an api client performs GET /
   Then the json response should look like:
   """
-    {'message': 'Hello World'}
+    {"message": "Hello World"}
   """
 
 Scenario: GET / has message
@@ -13,5 +13,5 @@ Scenario: GET / has message
   When an api client performs GET /
   Then the json response should look like:
   """
-    {'message': '{{...}}'}
+    {"message": "{{...}}"}
   """
