@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.add_dependency('cucumber', '>= 0.10.0')
+  s.add_dependency('cucumber')
   s.add_dependency('thin')
+  s.add_dependency('rest-client')
+  s.add_dependency('activesupport')
+  s.add_dependency('rspec')
 end
