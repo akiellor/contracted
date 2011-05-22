@@ -28,3 +28,23 @@ Scenario: POST with body '{"message": "hello", "sender": "Tom"}'
     }
   """
 
+Scenario: POST with nested object body
+  Given the "EchoBody" app is running
+  When an api client performs POST / with json body:
+  """
+    {
+      'message': {
+        'sender': 'Tom',
+        'text': 'Hello'
+      }
+    }
+  """
+  Then the json response should look like:
+  """
+    {
+      'message': {
+        'sender': 'Tom',
+        'text': '{{...}}'
+      }
+    }
+  """

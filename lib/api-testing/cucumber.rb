@@ -16,10 +16,25 @@ When /^an api client performs (POST|PUT) ([^\s]+) with json body:$/ do |method, 
 end
 
 Then /^the json response should look like:$/ do |response_body_string|
-  response_body = ActiveSupport::JSON.decode(response_body_string).map do |entry|
-    [entry[0], (entry[1] == '{{...}}' ? Any.new : entry[1])]
-  end
+  response_body = replace_any ActiveSupport::JSON.decode(response_body_string), '{{...}}', Any.new
   Hash[response_body].should == ActiveSupport::JSON.decode(@response)
+end
+
+def replace_any hash, match, replacement
+  Hash[hash.map do |entry|
+    key = entry[0]
+    value = entry[1]
+
+    if value == match
+      value = replacement
+    end
+
+    if value.is_a? Hash
+      value = replace_any value, match, replacement
+    end
+
+    [key, value]
+  end]
 end
 
 class Any
