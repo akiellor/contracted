@@ -12,8 +12,7 @@ When /^an api client performs (POST|PUT) ([^\s]+) with json body:$/ do |method, 
 end
 
 Then /^the json response should look like:$/ do |response_body_string|
-  response_body = replace_any ActiveSupport::JSON.decode(response_body_string), '{{...}}', Any.new
-  Hash[response_body].should == @peanut.last
+  JsonResponseDescriptor.new(response_body_string).should be_description_of @peanut.last
 end
 
 class Peanut
@@ -34,14 +33,12 @@ class Peanut
   end
 
   def get url, body, headers
-    response = RestClient.get("#{host}:#{port}#{url}", headers)
-    @last = ActiveSupport::JSON.decode(response)
+    @last = RestClient.get("#{host}:#{port}#{url}", headers)
   end
 
   [:post, :put, :delete].each do |method|
     define_method(method) do |url, body, headers|
-      response = RestClient::Resource.new("#{host}:#{port}#{url}", {}).send(method, body.to_s, headers)
-      @last = ActiveSupport::JSON.decode(response)
+      @last = RestClient::Resource.new("#{host}:#{port}#{url}", {}).send(method, body.to_s, headers)
     end
   end
 
@@ -52,23 +49,35 @@ class Peanut
   end
 end
 
-def replace_any hash, match, replacement
-  Hash[hash.map do |entry|
-    key = entry[0]
-    value = entry[1]
+class JsonResponseDescriptor
+  def initialize body
+    @body = body
+  end
+  
+  def description_of? response
+    response_body_description = replace_any ActiveSupport::JSON.decode(@body), '{{...}}', Any.new
+    response_body_description == ActiveSupport::JSON.decode(response.body)
+  end
+    
+  private
 
-    if value == match
-      value = replacement
-    end
+  def replace_any hash, match, replacement
+    Hash[hash.map do |entry|
+      key = entry[0]
+      value = entry[1]
 
-    if value.is_a? Hash
-      value = replace_any value, match, replacement
-    end
+      if value == match
+        value = replacement
+      end
 
-    [key, value]
-  end]
+      if value.is_a? Hash
+        value = replace_any value, match, replacement
+      end
+
+      [key, value]
+    end]
+  end
 end
-
 
 class Any
   def == other
