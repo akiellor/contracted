@@ -6,5 +6,5 @@ require 'rspec/expectations'
 require 'api-testing/cucumber'
 
 After do
-    @server_thread and @server_thread.terminate
+    @peanut and @peanut.unmount
 end
