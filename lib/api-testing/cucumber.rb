@@ -50,12 +50,22 @@ class Peanut
 end
 
 class JsonResponseDescriptor
+  def self.register_replacement match, replacement
+    @replacements ||= []
+    @replacements.unshift :match => match, :replacement => replacement
+  end
+
+  def self.replacements
+    @replacements || []
+  end
+
   def initialize body
     @body = body
   end
   
   def description_of? response
-    response_body_description = replace_any ActiveSupport::JSON.decode(@body), '{{...}}', Any.new
+    response_body_description = self.class.replacements.inject(ActiveSupport::JSON.decode(@body)) { |body, rep| replace_any body, rep[:match], rep[:replacement] }
+
     response_body_description == ActiveSupport::JSON.decode(response.body)
   end
     
