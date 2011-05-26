@@ -1,4 +1,5 @@
 require 'contracted/application'
+require 'contracted/response_description'
 require 'contracted/cucumber'
 
 class Any
@@ -7,7 +8,7 @@ class Any
   end
 end
 
-Contracted::JsonResponseDescription.register_replacement '{{...}}', Any.new
+Contracted::ResponseDescription.register_replacement '{{...}}', Any.new
 
 After do
   Contracted.app and Contracted.app.unmount
