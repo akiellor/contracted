@@ -34,7 +34,7 @@ module Contracted
       @server_thread = Thread.start do
         Thin::Server.start(host, port.to_s) { run app }
       end
-      loop_until { `curl #{host}:#{port} &> /dev/null`; $? == 0 }
+      loop_until { RestClient.get("#{host}:#{port}").code == 200 }
     end
     
     def unmount
@@ -96,12 +96,6 @@ module Contracted
         [key, value]
       end]
     end
-  end
-end
-
-class Any
-  def == other
-    true
   end
 end
 
