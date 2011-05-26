@@ -1,6 +1,10 @@
+require 'rest_client'
+require 'thin'
+require 'active_support'
+
 module Contracted
-  def self.mount app
-    @app = Application.new app, '9898'
+  def self.mount app, port = '9898'
+    @app = Application.new app, port.to_s
   end
 
   def self.app
@@ -8,36 +12,48 @@ module Contracted
   end
 
   class Application
-    attr_reader :last, :app, :host, :port
+    APPLICATION_START_TIMEOUT = 5
+    attr_reader :last, :app, :host, :port, :server
 
     def initialize app, port
       @app = app
+      @host = "0.0.0.0"
       @port = port
-      @host = '0.0.0.0'
-      @server_thread = Thread.start do
-        Thin::Server.start(host, port.to_s) { run app }
-      end
-      loop_until { RestClient.get("#{host}:#{port}").code == 200 }
+      @server = Thin::Server.new(host, port.to_s) { run app }
+      mount
     end
-    
+
+    def host_and_port
+      "#{host}:#{port}"
+    end
+
     def unmount
       @server_thread.terminate
     end
 
+    def mount
+      @server_thread = Thread.start do
+        server.start
+      end
+      Timeout.timeout(APPLICATION_START_TIMEOUT) do
+        loop_until { server.running? }
+      end
+    end
+
     def get url, body, headers
-      @last = RestClient.get("#{host}:#{port}#{url}", headers)
+      @last = RestClient.get("#{host_and_port}#{url}", headers)
     end
 
     [:post, :put, :delete].each do |method|
       define_method(method) do |url, body, headers|
-        @last = RestClient::Resource.new("#{host}:#{port}#{url}", {}).send(method, body.to_s, headers)
+        @last = RestClient::Resource.new("#{host_and_port}#{url}", {}).send(method, body.to_s, headers)
       end
     end
 
     private
 
     def loop_until &block
-        loop { break if block.call; sleep(1) }
+      loop { break if begin block.call rescue false end; sleep(1) }
     end
   end
 

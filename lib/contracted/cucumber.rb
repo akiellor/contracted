@@ -1,6 +1,6 @@
 Given /^the "([^"]*)" app is running$/ do |app_name|
   app = Kernel.const_get(app_name).new
-  Contracted.mount app
+  Contracted.mount app, '9898'
 end
 
 When /^an api client performs (GET|POST|PUT|DELETE) ([^\s]+)$/ do |method, url|
