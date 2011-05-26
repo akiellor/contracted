@@ -13,7 +13,7 @@ class Any
   end
 end
 
-Contracted::JsonResponseDescriptor.register_replacement '{{...}}', Any.new
+Contracted::JsonResponseDescription.register_replacement '{{...}}', Any.new
 
 After do
   Contracted.app and Contracted.app.unmount

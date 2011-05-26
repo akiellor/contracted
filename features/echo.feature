@@ -5,5 +5,7 @@ Scenario: GET with message 'hello'
   When an api client performs GET /?message=hello
   Then the json response should look like:
   """
-    {'message': 'hello'}
+  HTTP/1.1 200 OK
+  
+  {'message': 'hello'}
   """

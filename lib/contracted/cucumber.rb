@@ -12,6 +12,6 @@ When /^an api client performs (POST|PUT) ([^\s]+) with json body:$/ do |method, 
 end
 
 Then /^the json response should look like:$/ do |response_body_string|
-  Contracted::JsonResponseDescriptor.new(response_body_string).should be_description_of Contracted.app.last
+  Contracted::JsonResponseDescription.new(response_body_string).should be_description_of Contracted.app.last
 end
 

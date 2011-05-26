@@ -8,7 +8,9 @@ Scenario: POST with body '{"message": "hello"}'
   """
   Then the json response should look like:
   """
-    {'message': 'hello'}
+  HTTP/1.1 200 OK
+ 
+  {'message': 'hello'}
   """
 
 Scenario: POST with body '{"message": "hello", "sender": "Tom"}'
@@ -22,10 +24,12 @@ Scenario: POST with body '{"message": "hello", "sender": "Tom"}'
   """
   Then the json response should look like:
   """
-    {
-      'message': 'hello',
-      'sender': '{{...}}'
-    }
+  HTTP/1.1 200 OK
+
+  {
+    'message': 'hello',
+    'sender': '{{...}}'
+  }
   """
 
 Scenario: POST with nested object body
@@ -41,10 +45,12 @@ Scenario: POST with nested object body
   """
   Then the json response should look like:
   """
-    {
-      'message': {
-        'sender': 'Tom',
-        'text': '{{...}}'
-      }
+  HTTP/1.1 200 OK
+  
+  {
+    'message': {
+      'sender': 'Tom',
+      'text': '{{...}}'
     }
+  }
   """
