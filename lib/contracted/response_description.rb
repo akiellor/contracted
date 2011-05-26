@@ -1,17 +1,9 @@
 require 'active_support'
+require 'contracted/replacement'
 
 module Contracted
   class ResponseDescription
     attr_accessor :http_version, :http_status, :http_reason
-
-    def self.register_replacement match, replacement
-      @replacements ||= []
-      @replacements.unshift :match => match, :replacement => replacement
-    end
-
-    def self.replacements
-      @replacements || []
-    end
 
     def initialize descriptor
       status_line = /HTTP\/([\d\.]+) (\d+) (.*$)/.match(descriptor.strip.split(/^\n/).first)
@@ -20,7 +12,7 @@ module Contracted
     end
 
     def body
-      self.class.replacements.inject(ActiveSupport::JSON.decode(@body)) { |body, rep| replace_any body, rep[:match], rep[:replacement] }
+      Contracted::Replacer.replace(ActiveSupport::JSON.decode(@body))
     end
     
     def description_of? response
@@ -33,25 +25,6 @@ module Contracted
 
     def describes_body? response
       body == ActiveSupport::JSON.decode(response.body)
-    end
-      
-    private
-
-    def replace_any hash, match, replacement
-      Hash[hash.map do |entry|
-        key = entry[0]
-        value = entry[1]
-
-        if value == match
-          value = replacement
-        end
-
-        if value.is_a? Hash
-          value = replace_any value, match, replacement
-        end
-
-        [key, value]
-      end]
     end
   end
 end
