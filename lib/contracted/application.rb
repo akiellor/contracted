@@ -28,6 +28,7 @@ module Contracted
     end
 
     def unmount
+      @server.stop
       @server_thread.terminate
     end
 
