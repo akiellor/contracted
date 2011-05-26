@@ -1,18 +1,18 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "api-testing/version"
+require "contracted/version"
 
 Gem::Specification.new do |s|
   s.name        = "api-testing"
-  s.version     = Api::Testing::VERSION
+  s.version     = Contracted::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Andrew Kiellor"]
+  s.email       = ["akiellor@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Contracted is a set of cucumber steps to define HTTP based API's.}
+  s.description = %q{Contracted is a set of cucumber steps to define HTTP based API's.}
 
-  s.rubyforge_project = "api-testing"
+  s.rubyforge_project = "contracted"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
