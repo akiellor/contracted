@@ -23,4 +23,6 @@ Gem::Specification.new do |s|
   s.add_dependency('rest-client')
   s.add_dependency('activesupport')
   s.add_dependency('rspec')
+  s.add_dependency('treetop')
+  s.add_dependency('polyglot')
 end

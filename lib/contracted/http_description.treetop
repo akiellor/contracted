@@ -1,0 +1,58 @@
+grammar HttpDescription
+  rule http
+    status_line headers new_line body
+  end
+
+  rule body
+    .*
+  end
+
+  rule headers
+    header* (wildcard new_line)? 
+  end
+
+  rule wildcard
+    '...'
+  end
+
+  rule header
+    header_key ':' header_value new_line
+  end
+
+  rule header_key
+    [^:]+
+  end
+
+  rule header_value
+    [^\n]+ 
+  end
+
+  rule status_line
+    'HTTP/' version space status space reason new_line
+  end
+
+  rule version
+    [0-9.]+
+  end
+
+  rule space
+    ' '
+  end
+
+  rule reason_word
+    [A-Z]+
+  end
+
+  rule reason
+    reason_word (space reason_word)*
+  end
+
+  rule status
+    [0-9] 3..3
+  end
+
+  rule new_line
+    [\n]
+  end
+end
+
