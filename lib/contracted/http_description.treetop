@@ -1,3 +1,5 @@
+require 'contracted/http_description/matchers'
+
 grammar HttpDescription
   rule http
     status_line headers new_line body
@@ -8,15 +10,35 @@ grammar HttpDescription
   end
 
   rule headers
-    header* (wildcard new_line)? 
+    header* (wildcard new_line)? {
+      def values
+        elements.collect {|e| e.elements }.flatten.compact.select {|e| e.respond_to?(:value) }.map(&:value)
+      end
+
+      def matcher
+        if values.include? '...'
+          Contracted::HttpDescription::IncludeHeadersMatcher.new(values.select {|v| v != '...' })
+        else
+          Contracted::HttpDescription::SameHeadersMatcher.new(values)
+        end
+      end
+    } 
   end
 
   rule wildcard
-    '...'
+    '...' {
+      def value
+        text_value
+      end
+    }
   end
 
   rule header
-    header_key ':' header_value new_line
+    header_key ':' white_space header_value new_line {
+      def value
+        {header_key.text_value => header_value.text_value}
+      end
+    }
   end
 
   rule header_key
@@ -33,6 +55,10 @@ grammar HttpDescription
 
   rule version
     [0-9.]+
+  end
+
+  rule white_space
+    [\s]+
   end
 
   rule space
