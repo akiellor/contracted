@@ -1,8 +1,5 @@
-require 'contracted/application'
-require 'contracted/response_description'
-require 'contracted/replacement'
-require 'contracted/cucumber'
+require 'polyglot'
+require 'treetop'
 
-After do
-  Contracted.app and Contracted.app.unmount
-end
+require 'contracted/application'
+require 'contracted/json_description'

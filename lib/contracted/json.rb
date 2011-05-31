@@ -1,5 +1,3 @@
-require 'contracted/json_description'
-
 module Contracted
   module Json
     class Wildcard

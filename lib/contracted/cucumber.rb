@@ -1,7 +1,9 @@
-require 'polyglot'
-require 'treetop'
-require 'contracted/json_description'
+require 'contracted'
 require 'active_support'
+
+After do
+  Contracted.app and Contracted.app.unmount
+end
 
 Given /^the "([^"]*)" app is running$/ do |app_name|
   app = Kernel.const_get(app_name).new
