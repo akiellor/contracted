@@ -44,7 +44,17 @@ describe JsonDescriptionParser do
 
     subject { proc { parser.parse(description_string) } }
 
-    it { should raise_error(Contracted::MalformedJsonDescription, 'Expected one of ", ..., } at line 1, column 2 (byte 2) after {') }
+    it {
+      should raise_error(
+         Contracted::MalformedJsonDescription, 
+         <<-eos
+Expected one of ", ..., } at line 1, column 2 (byte 2) after {
+
+{'message': 'hello'}
+ ^
+         eos
+      )
+    }
   end
 
   def json json_string
