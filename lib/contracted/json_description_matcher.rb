@@ -1,13 +1,30 @@
 require 'contracted/json_description'
 
 module Contracted
-  class JsonDescriptionMatcher
-    def initialize value
-      @value = value
+  module Json
+    class Wildcard
+      def self.instance
+        @@instance ||= Wildcard.new
+      end
+
+      def == other
+        true
+      end
     end
 
-    def match? other
-      JsonDescriptionParser.new.parse(other).value  == @value 
+    class Object
+      def initialize elements
+        @hash = elements.select {|e| e != Wildcard.instance }.inject({}) {|r, h| r.merge(h)}
+        @include = elements.include? Wildcard.instance
+      end
+
+      def == other
+        if @include
+          other.merge(@hash) == other
+        else
+          @hash == other
+        end
+      end
     end
   end
 end

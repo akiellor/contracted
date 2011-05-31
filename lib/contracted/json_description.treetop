@@ -6,10 +6,6 @@ grammar JsonDescription
       def value
         json_value.value
       end
-
-      def matcher
-        Contracted::JsonDescriptionMatcher.new(value);
-      end
     }
   end
 
@@ -28,7 +24,7 @@ grammar JsonDescription
   rule wildcard
     space '...' space {
       def value
-        '...'
+        Contracted::Json::Wildcard.instance
       end
     }
   end
@@ -87,7 +83,7 @@ grammar JsonDescription
   rule object
     '{' space object_elements:object_element* space '}' {
       def value
-        object_elements.elements.map {|p| p.value }
+        Contracted::Json::Object.new(object_elements.elements.map {|p| p.value })
       end
     }
   end

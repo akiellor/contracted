@@ -6,14 +6,14 @@ describe JsonDescriptionParser do
   let(:parser) { JsonDescriptionParser.new } 
   let(:description) { parser.parse(description_string) }
 
-  subject { description.matcher }
+  subject { description.value }
 
   context "a standard json representation" do
     let(:description_string) { '{"message": "hello"}' }
     
     describe "the description" do
-      it { should be_match '{"message": "hello"}' }
-      it { should_not be_match '{"message": "goodbye"}' }
+      it { should == json('{"message": "hello"}') }
+      it { should_not == json('{"message": "goodbye"}') }
     end
   end
 
@@ -21,10 +21,10 @@ describe JsonDescriptionParser do
     let(:description_string) { '{"message": "hello", ...}' }
 
     describe "the description" do
-      it { pending(subject.inspect); should be_match '{"message": "hello"}'  }
-      it { pending(subject.inspect); should be_match '{"message": "hello", "type": "greeting"}' }
-      it { pending(subject.inspect); should_not be_match '{"message": "goodbye"}' }
-      it { pending(subject.inspect); should_not be_match '{"type": "greeting"}' }
+      it { should == json('{"message": "hello"}')  }
+      it { should == json('{"message": "hello", "type": "greeting"}') }
+      it { should_not == json('{"message": "goodbye"}') }
+      it { should_not == json('{"type": "greeting"}') }
     end
   end
 
@@ -32,12 +32,16 @@ describe JsonDescriptionParser do
     let(:description_string) { '{"message": ..., "type": "greeting" }' }
 
     describe "the description" do
-      it { pending(subject.inspect); should be_match '{"message": "hello", "type": "greeting" }' }
-      it { pending(subject.inspect); should be_match '{"message": "goodbye", "type": "greeting" }' }
-      it { pending(subject.inspect); should_not be_match '{"msg": "hello", "type": "greeting" }' }
-      it { pending(subject.inspect); should_not be_match '{"message": "hello"}' }
-      it { pending(subject.inspect); should_not be_match '{"type": "greeting"}' }
+      it { should == json('{"message": "hello", "type": "greeting" }') }
+      it { should == json('{"message": "goodbye", "type": "greeting" }') }
+      it { should_not == json('{"msg": "hello", "type": "greeting" }') }
+      it { should_not == json('{"message": "hello"}') }
+      it { should_not == json('{"type": "greeting"}') }
     end
+  end
+
+  def json json_string
+    ActiveSupport::JSON.decode json_string
   end
 end
 
