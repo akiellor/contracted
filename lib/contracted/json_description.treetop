@@ -1,16 +1,34 @@
+require 'contracted/json_description_matcher'
+
 grammar JsonDescription
   rule json
-    space json_value space { def value; json_value.value; end }
+    space json_value space {
+      def value
+        json_value.value
+      end
+
+      def matcher
+        Contracted::JsonDescriptionMatcher.new(value);
+      end
+    }
   end
 
   rule json_value
-    string / numeric / keyword / object / array
+    string / numeric / keyword / object / array / wildcard
   end
 
   rule string
     '"' chars:char* '"' {
       def value
         chars.elements.map {|e| e.value }.join
+      end
+    }
+  end
+
+  rule wildcard
+    space '...' space {
+      def value
+        '...'
       end
     }
   end
@@ -67,15 +85,23 @@ grammar JsonDescription
   end
 
   rule object
-    '{' space pairs:pair* space '}' {
+    '{' space object_elements:object_element* space '}' {
       def value
-        pairs.elements.map {|p| p.value }.inject({}) {|h,p| h.merge p }
+        object_elements.elements.map {|p| p.value }
+      end
+    }
+  end
+
+  rule object_element
+    e:(pair / wildcard) (',' &object_element / !object_element) {
+      def value
+        e.value
       end
     }
   end
 
   rule pair
-    space string space ':' space json_value space (',' &pair / !pair) {
+    space string space ':' space json_value space {
       def value
         { string.value => json_value.value }
       end
