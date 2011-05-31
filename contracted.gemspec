@@ -9,8 +9,10 @@ Gem::Specification.new do |s|
   s.authors     = ["Andrew Kiellor"]
   s.email       = ["akiellor@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{Contracted is a set of cucumber steps to define HTTP based API's.}
-  s.description = %q{Contracted is a set of cucumber steps to define HTTP based API's.}
+  s.summary     = %q{Contracted is a tool aimed at testing JSON API's.}
+  s.description = %q{
+    Contracted is a tool aimed at testing JSON API's.
+  }
 
   s.rubyforge_project = "contracted"
 
