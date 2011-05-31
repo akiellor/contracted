@@ -1,6 +1,6 @@
 require 'contracted/json'
 
-grammar JsonDescription
+grammar JsonDescriptionGrammar
   rule json
     space json_value space {
       def value

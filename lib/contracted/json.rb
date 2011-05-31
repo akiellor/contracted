@@ -1,4 +1,7 @@
 module Contracted
+  class MalformedJsonDescription < Exception
+  end
+
   module Json
     class Wildcard
       def self.instance

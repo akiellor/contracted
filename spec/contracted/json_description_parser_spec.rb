@@ -39,6 +39,15 @@ describe JsonDescriptionParser do
     end
   end
 
+  context "with single quotes" do
+    let(:description_string) { "{'message': 'hello'}" }
+
+    subject { proc { parser.parse(description_string) } }
+
+
+    it { should raise_error(Contracted::MalformedJsonDescription) }
+  end
+
   def json json_string
     ActiveSupport::JSON.decode json_string
   end
