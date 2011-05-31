@@ -6,11 +6,9 @@ Scenario: POST with body '{"message": "hello"}'
   """
     {'message': 'hello'}
   """
-  Then the json response should look like:
+  Then the json response body should look like:
   """
-  HTTP/1.1 200 OK
- 
-  {'message': 'hello'}
+  {"message": "hello"}
   """
 
 Scenario: POST with body '{"message": "hello", "sender": "Tom"}'
@@ -18,17 +16,15 @@ Scenario: POST with body '{"message": "hello", "sender": "Tom"}'
   When an api client performs POST / with json body:
   """
     {
-      'message': 'hello',
-      'sender': 'Tom'
+      "message": "hello",
+      "sender": "Tom"
     }
   """
-  Then the json response should look like:
+  Then the json response body should look like:
   """
-  HTTP/1.1 200 OK
-
   {
-    'message': 'hello',
-    'sender': '{{...}}'
+    "message": "hello",
+    "sender": ...
   }
   """
 
@@ -37,20 +33,18 @@ Scenario: POST with nested object body
   When an api client performs POST / with json body:
   """
     {
-      'message': {
-        'sender': 'Tom',
-        'text': 'Hello'
+      "message": {
+        "sender": "Tom",
+        "text": "Hello"
       }
     }
   """
-  Then the json response should look like:
+  Then the json response body should look like:
   """
-  HTTP/1.1 200 OK
-  
   {
-    'message': {
-      'sender': 'Tom',
-      'text': '{{...}}'
+    "message": {
+      "sender": "Tom",
+      "text": ...
     }
   }
   """
