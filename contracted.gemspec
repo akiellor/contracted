@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "contracted/version"
 
 Gem::Specification.new do |s|
-  s.name        = "api-testing"
+  s.name        = "contracted"
   s.version     = Contracted::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Andrew Kiellor"]
