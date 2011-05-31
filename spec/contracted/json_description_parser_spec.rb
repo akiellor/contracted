@@ -1,6 +1,5 @@
-require 'polyglot'
-require 'treetop'
-require 'contracted/json_description'
+require 'active_support'
+require 'contracted'
 
 describe JsonDescriptionParser do
   let(:parser) { JsonDescriptionParser.new } 
