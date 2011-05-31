@@ -48,3 +48,24 @@ Scenario: POST with nested object body
     }
   }
   """
+
+Scenario: POST with nested object body using wilcard match
+  Given the "EchoBody" app is running
+  When an api client performs POST / with json body:
+  """
+    {
+      "message": {
+        "sender": "Tom",
+        "text": "Hello"
+      }
+    }
+  """
+  Then the json response body should look like:
+  """
+  {
+    "message": {
+      "sender": ...,
+      ...
+    }
+  }
+  """
