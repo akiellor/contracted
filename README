@@ -25,7 +25,8 @@ This says that the 'message' object has an entry with key
 
 The cucumber features provide more examples.
 
-The grammar is based on the JSON parser the blog post
+The grammar is based on the JSON parser from the following
+blog post:
 
 http://coderrr.wordpress.com/2008/02/13/treetop-is-cool/
 
