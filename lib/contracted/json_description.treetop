@@ -1,4 +1,4 @@
-require 'contracted/json_description_matcher'
+require 'contracted/json'
 
 grammar JsonDescription
   rule json

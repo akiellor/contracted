@@ -1,0 +1,31 @@
+Contracted
+==========================================================
+Contracted provides a few tools to describe HTTP Responses
+and HTTP Response bodies.
+
+A few cucumber steps are implemented which faciliated this
+description.
+
+
+JSON Description Grammar
+----------------------------------------------------------
+The JSON Description Grammar is a superset of JSON which 
+adds some wildcards allowing you to describe the parts of
+the response your interested in. Example:
+
+{
+  "message": {
+    "text": ...,
+    ...
+  }
+}
+
+This says that the 'message' object has an entry with key
+'text' and any number of other entries.
+
+The cucumber features provide more examples.
+
+The grammar is based on the JSON parser the blog post
+
+http://coderrr.wordpress.com/2008/02/13/treetop-is-cool/
+
