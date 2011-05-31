@@ -1,5 +1,6 @@
 require 'thin'
 require 'rest_client'
+Thin::Logging.silent = true
 
 module Contracted
   def self.mount app, port = '9898'
