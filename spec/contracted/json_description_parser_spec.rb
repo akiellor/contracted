@@ -43,6 +43,12 @@ describe JsonDescriptionParser do
     end
   end
 
+  context "with array in heirrachy" do
+    let(:description_string) { '[1,2,3,4,{"key": ...}]' }
+
+    it { should == json('[1,2,3,4,{"key": "value"}]') }
+  end
+
   context "with a wildcard value" do
     let(:description_string) { '{"message": ..., "type": "greeting" }' }
 
