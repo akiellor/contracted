@@ -27,6 +27,22 @@ describe JsonDescriptionParser do
     end
   end
 
+  context "with a nested wildcard" do
+    let(:description_string) { '{"message": {"type": "greeting", "text": ...}}' }
+
+    describe "the description" do
+      it { should == json('{"message": {"type": "greeting", "text": "hello"}}') }
+    end
+  end
+
+  context "with weird whitespace" do
+    let(:description_string) { %Q{{\n"message":          {"type":\n "greeting", \n\n "text": ...}}} }
+
+    describe "the description" do
+      it { should == json('{"message": {"type": "greeting", "text": "hello"}}') }
+    end
+  end
+
   context "with a wildcard value" do
     let(:description_string) { '{"message": ..., "type": "greeting" }' }
 
