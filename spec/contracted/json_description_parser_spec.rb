@@ -49,6 +49,20 @@ describe JsonDescriptionParser do
     it { should == json('[1,2,3,4,{"key": "value"}]') }
   end
 
+  context "with empty string" do
+    let(:description_string) { '""' }
+
+    it { should == json('""') }
+  end
+
+  context "with wildcard" do
+    let(:description_string) { '...' }
+
+    it { should == 1 }
+    it { should == {} }
+    it { should == [1,2,3] }
+  end
+
   context "with a wildcard value" do
     let(:description_string) { '{"message": ..., "type": "greeting" }' }
 
