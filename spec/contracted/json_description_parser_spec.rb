@@ -75,6 +75,18 @@ describe JsonDescriptionParser do
     end
   end
 
+  context "with multiple key wildcard" do
+    let(:description_string) { '{"message": ... , ...}' }
+
+    describe "the description" do
+      it { should == json('{"message": "hello"}')  }
+      it { should == json('{"message": "hello", "type": "greeting"}') }
+      it { should == json('{"message": "hello", "type": "greeting", "length": "150"}') }
+      it { should == json('{"message": "goodbye"}') }
+      it { should_not == json('{"type": "greeting"}') }
+    end
+  end
+
   context "with single quotes" do
     let(:description_string) { "{'message': 'hello'}" }
 
