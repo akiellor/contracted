@@ -20,11 +20,11 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  s.add_dependency('cucumber')
-  s.add_dependency('thin')
-  s.add_dependency('rest-client')
-  s.add_dependency('activesupport')
-  s.add_dependency('rspec')
+  s.add_development_dependency('cucumber')
+  s.add_development_dependency('thin')
+  s.add_development_dependency('rest-client')
+  s.add_development_dependency('activesupport')
+  s.add_development_dependency('rspec')
   s.add_dependency('treetop')
   s.add_dependency('polyglot')
 end
