@@ -10,9 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["akiellor@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{Contracted is a tool aimed at testing JSON API's.}
-  s.description = %q{
-    Contracted is a tool aimed at testing JSON API's.
-  }
+  s.description = %q{Contracted is a tool aimed at testing JSON API's.}
 
   s.rubyforge_project = "contracted"
 
@@ -24,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('thin')
   s.add_development_dependency('rest-client')
   s.add_development_dependency('activesupport')
+  s.add_development_dependency('rake', '0.8.7')
   s.add_development_dependency('rspec')
   s.add_dependency('treetop')
   s.add_dependency('polyglot')

@@ -1,0 +1,3 @@
+run: bundle exec rake ci:cucumber
+results:
+  - out/features.html

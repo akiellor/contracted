@@ -1,0 +1,3 @@
+run: bundle exec rake ci:spec
+results:
+  - out/examples.html

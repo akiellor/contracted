@@ -1,6 +1,5 @@
 *.gem
 .bundle
-out
 Gemfile.lock
 pkg/*
 tmp

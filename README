@@ -20,6 +20,8 @@ the response your interested in. Example:
   }
 }
 
+.
+
 This says that the 'message' object has an entry with key
 'text' and any number of other entries.
 
