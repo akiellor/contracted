@@ -1,0 +1,3 @@
+run: rake ci
+results:
+  - out/features.html

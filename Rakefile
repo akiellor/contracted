@@ -10,9 +10,17 @@ end
 
 Bundler::GemHelper.install_tasks
 
-desc 'Runs features'
-Cucumber::Rake::Task.new do |t|
-    t.cucumber_opts = %w{--format pretty}
+namespace :cucumber do
+  desc 'Runs features'
+  Cucumber::Rake::Task.new(:default) do |t|
+    t.cucumber_opts = %w{--format progress}
+  end
+
+  desc 'Runs features for ci'
+  Cucumber::Rake::Task.new(:ci) do |t|
+    t.cucumber_opts = %w{--out out/features.html --format html}
+  end
 end
 
-task :default => [:spec, :cucumber]
+task :default => [:spec, :"cucumber:default"]
+task :ci => [:spec, :"cucumber:ci"]
