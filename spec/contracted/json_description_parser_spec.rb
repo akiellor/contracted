@@ -36,14 +36,14 @@ describe JsonDescriptionParser do
   end
 
   context "with weird whitespace" do
-    let(:description_string) { %Q{{\n"message":          {"type":\n "greeting", \n\n "text": ...}}} }
+    let(:description_string) { %Q{{\t"message":          {"type":\n "greeting", \n\r "text": ...}}} }
 
     describe "the description" do
       it { should == json('{"message": {"type": "greeting", "text": "hello"}}') }
     end
   end
 
-  context "with array in heirrachy" do
+  context "with array in heirarchy" do
     let(:description_string) { '[1,2,3,4,{"key": ...}]' }
 
     it { should == json('[1,2,3,4,{"key": "value"}]') }
