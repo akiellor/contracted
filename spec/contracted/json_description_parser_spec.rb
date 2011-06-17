@@ -1,4 +1,4 @@
-require 'active_support'
+require 'json'
 require 'contracted'
 
 describe JsonDescriptionParser do
@@ -11,8 +11,8 @@ describe JsonDescriptionParser do
     let(:description_string) { '{"message": "hello"}' }
     
     describe "the description" do
-      it { should == json('{"message": "hello"}') }
-      it { should_not == json('{"message": "goodbye"}') }
+      it { should be_match json('{"message": "hello"}') }
+      it { should_not be_match json('{"message": "goodbye"}') }
     end
   end
 
@@ -20,10 +20,11 @@ describe JsonDescriptionParser do
     let(:description_string) { '{"message": "hello", ...}' }
 
     describe "the description" do
-      it { should == json('{"message": "hello"}')  }
-      it { should == json('{"message": "hello", "type": "greeting"}') }
-      it { should_not == json('{"message": "goodbye"}') }
-      it { should_not == json('{"type": "greeting"}') }
+      it { should be_match json('{"message": "hello"}')  }
+
+      it { should be_match json('{"message": "hello", "type": "greeting"}') }
+      it { should_not be_match json('{"message": "goodbye"}') }
+      it { should_not be_match json('{"type": "greeting"}') }
     end
   end
 
@@ -31,7 +32,7 @@ describe JsonDescriptionParser do
     let(:description_string) { '{"message": {"type": "greeting", "text": ...}}' }
 
     describe "the description" do
-      it { should == json('{"message": {"type": "greeting", "text": "hello"}}') }
+      it { should be_match json('{"message": {"type": "greeting", "text": "hello"}}') }
     end
   end
 
@@ -39,39 +40,33 @@ describe JsonDescriptionParser do
     let(:description_string) { %Q{{\t"message":          {"type":\n "greeting", \n\r "text": ...}}} }
 
     describe "the description" do
-      it { should == json('{"message": {"type": "greeting", "text": "hello"}}') }
+      it { should be_match json('{"message": {"type": "greeting", "text": "hello"}}') }
     end
   end
 
   context "with array in heirarchy" do
     let(:description_string) { '[1,2,3,4,{"key": ...}]' }
 
-    it { should == json('[1,2,3,4,{"key": "value"}]') }
-  end
-
-  context "with empty string" do
-    let(:description_string) { '""' }
-
-    it { should == json('""') }
+    it { should be_match json('[1,2,3,4,{"key": "value"}]') }
   end
 
   context "with wildcard" do
     let(:description_string) { '...' }
 
-    it { should == 1 }
-    it { should == {} }
-    it { should == [1,2,3] }
+    it { should be_match 1 }
+    it { should be_match({}) }
+    it { should be_match [1,2,3] }
   end
 
   context "with a wildcard value" do
     let(:description_string) { '{"message": ..., "type": "greeting" }' }
 
     describe "the description" do
-      it { should == json('{"message": "hello", "type": "greeting" }') }
-      it { should == json('{"message": "goodbye", "type": "greeting" }') }
-      it { should_not == json('{"msg": "hello", "type": "greeting" }') }
-      it { should_not == json('{"message": "hello"}') }
-      it { should_not == json('{"type": "greeting"}') }
+      it { should be_match json('{"message": "hello", "type": "greeting" }') }
+      it { should be_match json('{"message": "goodbye", "type": "greeting" }') }
+      it { should_not be_match json('{"msg": "hello", "type": "greeting" }') }
+      it { should_not be_match json('{"message": "hello"}') }
+      it { should_not be_match json('{"type": "greeting"}') }
     end
   end
 
@@ -79,11 +74,11 @@ describe JsonDescriptionParser do
     let(:description_string) { '{"message": ... , ...}' }
 
     describe "the description" do
-      it { should == json('{"message": "hello"}')  }
-      it { should == json('{"message": "hello", "type": "greeting"}') }
-      it { should == json('{"message": "hello", "type": "greeting", "length": "150"}') }
-      it { should == json('{"message": "goodbye"}') }
-      it { should_not == json('{"type": "greeting"}') }
+      it { should be_match json('{"message": "hello"}')  }
+      it { should be_match json('{"message": "hello", "type": "greeting"}') }
+      it { should be_match json('{"message": "hello", "type": "greeting", "length": "150"}') }
+      it { should be_match json('{"message": "goodbye"}') }
+      it { should_not be_match json('{"type": "greeting"}') }
     end
   end
 
@@ -106,7 +101,21 @@ Expected one of ", ..., } at line 1, column 2 (byte 2) after {
   end
 
   def json json_string
-    ActiveSupport::JSON.decode json_string
+    JSON.parse json_string
+  end
+
+  RSpec::Matchers.define :be_match do |json|
+    match do |description|
+      description.match? json
+    end
+
+    failure_message_for_should do
+      "Expected json to match but didn't"
+    end
+
+    failure_message_for_should_not do
+      "Expected json not to match but did"
+    end
   end
 end
 

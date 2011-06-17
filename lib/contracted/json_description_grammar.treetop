@@ -16,7 +16,8 @@ grammar JsonDescriptionGrammar
   rule string
     '"' chars:char* '"' {
       def value
-        chars.elements.map {|e| e.value }.join
+        str = chars.elements.map {|e| e.value }.join
+        Contracted::Json::Value.new(str)
       end
     }
   end
@@ -37,7 +38,7 @@ grammar JsonDescriptionGrammar
           when /[nbfrt]/
             {'n' => "\n", 'b' => "\b", 'f' => "\f", 'r' => "\r", 't' => "\t"}[c]
           when 'u'
-            [text_value[2,4].to_i(16)].pack("U")
+            [text_value[2,4].to_i(16)].pack("U").tap {|u| p u}
           else
             c
           end
@@ -57,15 +58,15 @@ grammar JsonDescriptionGrammar
   end
 
   rule exp
-    (float / integer) [eE] [+-]? unsigned_integer  { def value; text_value.to_f; end }
+    (float / integer) [eE] [+-]? unsigned_integer  { def value; Contracted::Json::Value.new(text_value.to_f); end }
   end
 
   rule float
-    integer '.' [0-9]+  { def value; text_value.to_f; end }
+    integer '.' [0-9]+  { def value; Contracted::Json::Value.new(text_value.to_f); end }
   end
 
   rule integer
-    '-'? unsigned_integer  { def value; text_value.to_i; end }
+    '-'? unsigned_integer  { def value; Contracted::Json::Value.new(text_value.to_i); end }
   end
 
   rule unsigned_integer
@@ -75,7 +76,7 @@ grammar JsonDescriptionGrammar
   rule keyword
     ('true' / 'false' / 'null') {
       def value
-        { 'true' => true, 'false' => false, 'null' => nil }[text_value]
+        Contracted::Json::Value.new({ 'true' => true, 'false' => false, 'null' => nil }[text_value])
       end
     }
   end
@@ -107,7 +108,7 @@ grammar JsonDescriptionGrammar
   rule array
     '[' space array_values:array_value* space ']' {
       def value
-        array_values.elements.map {|e| e.value }
+        Contracted::Json::Array.new(array_values.elements.map {|e| e.value })
       end
     }
   end

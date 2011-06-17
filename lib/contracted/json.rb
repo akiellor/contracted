@@ -8,7 +8,7 @@ module Contracted
         @@instance ||= Wildcard.new
       end
 
-      def == other
+      def match? other
         true
       end
     end
@@ -19,12 +19,38 @@ module Contracted
         @include = elements.include? Wildcard.instance
       end
 
-      def == other
-        if @include
-          other.merge(@hash) == other
-        else
-          @hash == other
+      def match? other
+        return false if !@include && other.size != @hash.size
+        @hash.all? do |k, v|
+          (other.has_key?(k.element) && v.match?(other[k.element]))
         end
+      end
+    end
+
+    class Array
+      def initialize elements
+        @elements = elements
+      end
+
+      def match? other
+        other.each_with_index do |item, index|
+          unless @elements[index].match? item
+            return false
+          end
+        end
+        true
+      end
+    end
+
+    class Value
+      attr_reader :element
+
+      def initialize element
+        @element = element
+      end
+
+      def match? other
+        @element == other
       end
     end
   end
