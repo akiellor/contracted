@@ -23,5 +23,5 @@ Then /^the json response should look like:$/ do |response_body_string|
 end
 
 Then /^the json response body should look like:$/ do |response_body_string|
-  JsonDescriptionParser.new.parse(response_body_string).value.should == ActiveSupport::JSON.decode(Contracted.app.last.body)
+  JsonDescriptionParser.new.parse(response_body_string).value.should be_match ActiveSupport::JSON.decode(Contracted.app.last.body)
 end
