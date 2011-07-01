@@ -5,3 +5,4 @@ pkg/*
 tmp
 *.swp
 *.swo
+out
