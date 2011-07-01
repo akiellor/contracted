@@ -6,7 +6,7 @@ rvm list strings | grep "$RUBY_VERSION" > /dev/null
 if ! [[ $? -eq 0 ]]; then
   rvm install $RUBY_VERSION
 fi
-rvm use $RUBY_VERSION@bt --create
+rvm use $RUBY_VERSION@contracted --create
 
 gem list bundler | grep bundler > /dev/null
 if ! [[ $? -eq 0 ]]; then
@@ -14,3 +14,5 @@ if ! [[ $? -eq 0 ]]; then
 fi
 
 bundle check || bundle
+
+$@
