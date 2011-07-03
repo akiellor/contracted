@@ -6,5 +6,6 @@ if ! [[ $? -eq 0 ]]; then
 fi
 
 bundle check || bundle
-
-exec $@
+pwd
+export BUNDLE_GEMFILE=./Gemfile
+bundle exec $@
