@@ -1,13 +1,4 @@
-#!/usr/bin/env bash
-
-. ~/.rvm/scripts/rvm
-
-rvm list | grep ree-1.8.7-2011.03 > /dev/null
-if ! [[ $? -eq 0 ]]; then
-  rvm install ree
-fi
-
-rvm use ree@contracted --create
+#!/usr/bin/env rvm-shell ree-1.8.7-2011.03@contracted -e
 
 gem list bundler | grep bundler > /dev/null
 if ! [[ $? -eq 0 ]]; then
